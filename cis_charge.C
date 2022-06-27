@@ -55,7 +55,7 @@ void cis_charge_new(int run, const char *var=NULL, const char *cut=NULL, const c
 
   TString fname;
   fname.Form("%s/tile_%6.6d_%s.0.aan.root", input,run,type);
-  std::cout << "Opening " << fname << std::endl;
+  std::cout << "\nRun " << run << std::endl;
 
   TFile fff(fname,"READ");
   TTree * h2000 = (TTree *)fff.Get("h2000");
@@ -90,8 +90,6 @@ void cis_charge_new(int run, const char *var=NULL, const char *cut=NULL, const c
 
   c1->SaveAs(fname);
 
-  delete c1;
-  delete fff;
 
 }
 
@@ -124,9 +122,6 @@ void cis_plot_frame(int run, const char* str_var, const char* str_cut, const cha
     mod.ReplaceAll("]","");
   }
 
-  std::cout << "IND IS" << ind << '\n';
-
-  std::cout << "nvars" << nvars << '\n';
   if(nvars == 2){
     var.Form(str_var,(const char *)ind, (const char *)ind);
     cut.Form(str_cut,(const char *)ind);
@@ -139,7 +134,7 @@ void cis_plot_frame(int run, const char* str_var, const char* str_cut, const cha
 }
 
 
-void cis_timing(int run, int module=2, int chan=10, const char * xval = 0)
+void cis_timing(int run, int module=2, int chan=2, const char * xval = 0)
 {
   const char* var_lo = "tFit_lo%s";
   const char* cut_lo = "cispar[7]==100 && 374 < cispar[6] && cispar[6] < 875";
@@ -151,7 +146,7 @@ void cis_timing(int run, int module=2, int chan=10, const char * xval = 0)
   cis_plot_frame(run, var_hi, cut_hi, name_hi, module, chan, xval);
 }
 
-void cis_ampq(int run, int module=2, int chan=10, const char * xval = 0)
+void cis_ampq(int run, int module=2, int chan=2, const char * xval = 0)
 {
   const char* var_lo = "eFit_lo%s/cispar[6]:cispar[6]";
   const char* cut_lo = "cispar[7]==100 && 374 < cispar[6] && cispar[6] < 875";
@@ -172,13 +167,15 @@ void cis_pulses(int run, int module=2, int chan=10, const char * xval = 0)
   cis_plot_frame(run, var_lo, cut_lo, name_lo, module, chan, xval, "COLZ", 2);
 }
 
+
 void check_run(int run){
   cis_timing(run);
   cis_ampq(run);
 }
 
 void check_all_runs(){
-  int runs[]{413287, 413579, 413594, 413976, 414257, 414464, 414513, 414763, 415169, 415434, 415531, 415564, 415914, 416099};
+  //int runs[]{413287, 413579, 413594, 413976, 414257, 414464, 414513, 414763, 415169, 415434, 415531, 415564, 415914, 416099};
+  int runs[]{419864, 420384, 420709, 421222, 421606, 422100, 422198, 422233, 422268, 422529, 422767, 423123, 423287};
   int num_runs{ static_cast<int>(std::size(runs)) };
   for (int i{0}; i<num_runs; ++i){
     check_run(runs[i]);
@@ -202,7 +199,7 @@ void check_all_ampq(){
 }
 
 void check_all_pulses(){
-  int runs[]{417535,417549,417562,417563,417564,417566,417567,417568,417569,417572,417575,417576,417578};
+  int runs[]{416626, 416941, 417164, 417535, 417882, 418169, 418412, 418778, 418994, 419504};
   int num_runs{ static_cast<int>(std::size(runs)) };
   for (int i{0}; i<num_runs; ++i){
     cis_pulses(runs[i], 52);

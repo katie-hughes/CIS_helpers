@@ -26,6 +26,9 @@ parser.add_argument('--cistxt', help='cis.txt file (output of update command), \
 	slightly more accurate than not including it. required \
 	if separate_partitions is used.', default=None)
 
+parser.add_argument('--cisupdate', action='store_true', help=
+'Generate CIS update command instead')
+
 parser.add_argument('--separate_partitions', action='store_true', help=
 'Use if there are different valid runs for different partitions+gains.')
 
@@ -180,8 +183,12 @@ f.write('#!/usr/bin/env bash\n')
 
 print()
 for key in D:
-	l1 = 'macros/cis/StudyFlag.py '
-	lf = '--output '+args.output+' --qflag \'all\' --timestab --printopt \'Print_All\''
+	if args.cisupdate:
+		l1  = 'macros/cis/CIS_DB_Update.py '
+		lf = ''
+	else:
+		l1 = 'macros/cis/StudyFlag.py '
+		lf = '--output '+args.output+' --qflag \'all\' --timestab --printopt \'Print_All\''
 	if listdate is False:
 		date = key
 		print("DATE:", date, end='\n\n')

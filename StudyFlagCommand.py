@@ -114,6 +114,31 @@ if args.cistxt is not None:
 	datenums = [int(i.replace('-','')) for i in dates]
 
 
+def convertName(name):
+	spl = name.split('_')
+	#EBC_m03_c02_lowgain
+	partition = spl[0]
+	module = int(spl[1].strip('m'))
+	channel = int(spl[2].strip('c'))
+	if module < 10:
+		module = '0'+str(module)
+	else:
+		module = str(module)
+	if channel < 10:
+		channel = ' '+str(channel)
+	else:
+		channel = str(channel)
+	gain = spl[3]
+	if gain == 'lowgain':
+		gain = 0
+	elif gain == 'highgain':
+		gain = 1
+	else:
+		gain = -1
+	return partition+module+' '+channel+' '+str(gain)
+
+
+
 
 listdate = False
 with open(args.recal_file) as f:
@@ -189,6 +214,7 @@ for key in D:
 	else:
 		l1 = 'macros/cis/StudyFlag.py '
 		lf = '--output '+args.output+' --qflag \'all\' --timestab --printopt \'Print_All\''
+	IDs = D[key]
 	if listdate is False:
 		date = key
 		print("DATE:", date, end='\n\n')
@@ -200,7 +226,6 @@ for key in D:
 		l3 = '--region '
 		print(l3, end='')
 		f.write(l3)
-		IDs = D[key]
 		for i in IDs:
 			li = '\''+i+'\' '
 			print(li, end='')
@@ -219,7 +244,6 @@ for key in D:
 		l3 = '--region '
 		print(l3, end='')
 		f.write(l3)
-		IDs = D[key]
 		for i in IDs:
 			li = '\''+i+'\' '
 			print(li, end='')
@@ -231,6 +255,14 @@ for key in D:
 		f.write(lf)
 		print('\n')
 		f.write('\n')
+	if args.cisupdate:
+		f.write('cd ~/Tucs/results\n')
+		f.write('ReadCalibFromCool.py --schema="sqlite://;schema=tileSqlite.db;dbname=CONDBR2" --folder=/TILE/OFL02/CALIB/CIS/LIN --tag=UPD1 | grep -v miss > Recal.txt\n')
+		for i in IDs:
+			f.write('grep \''+convertName(i)+'\' Recal.txt >> WOOOFinalRecal.txt\n')
+		f.write('rm tileSqlite.db CIS_DB_update.txt Recal.txt\n')
+		f.write('cd ~/Tucs\n')
+
 
 os.chmod(args.bashfile, 0o777)
 #macros/cis/StudyFlag.py --date '2021-08-06' '2021-08-23' --region 'EBC_m38_c05_highgain'  --output ExampleFolder --qflag 'all' --timestab --printopt 'Print_All'

@@ -149,13 +149,15 @@ void cis_timing(int run, int module=2, int chan=2, const char * xval = 0)
 void cis_ampq(int run, int module=2, int chan=2, const char * xval = 0)
 {
   const char* var_lo = "eFit_lo%s/cispar[6]:cispar[6]";
-  const char* cut_lo = "cispar[7]==100 && 374 < cispar[6] && cispar[6] < 875";
+  const char* cut_lo = "cispar[7]==100 && 374 < cispar[6] && cispar[6] < 875 && eFit_lo%s > 6";
+  // if lowgain amplitude is under 6, it's ignored in CIS calculations.
   const char* name_lo = "%s_LG_AmpQ";
-  cis_plot_frame(run, var_lo, cut_lo, name_lo, module, chan, xval, "BOX");
+  cis_plot_frame(run, var_lo, cut_lo, name_lo, module, chan, xval, "BOX", 2);
   const char* var_hi = "eFit_hi%s/cispar[6]:cispar[6]";
-  const char* cut_hi = "cispar[7]==100 && 3 < cispar[6] && cispar[6] < 13";
+  const char* cut_hi = "cispar[7]==100 && 3 < cispar[6] && cispar[6] < 13 && eFit_hi%s > 40";
+  // if highgain amplitude is under 40, it's ignored in CIS calculations. 
   const char* name_hi = "%s_HG_AmpQ";
-  cis_plot_frame(run, var_hi, cut_hi, name_hi, module, chan, xval, "BOX");
+  cis_plot_frame(run, var_hi, cut_hi, name_hi, module, chan, xval, "BOX", 2);
 }
 
 

@@ -5,6 +5,7 @@
 #include <vector>
 #include <iostream>
 #include <cstdio>
+#include <list>
 
 #include "Riostream.h"
 #include "TROOT.h"
@@ -134,7 +135,7 @@ void cis_plot_frame(int run, const char* str_var, const char* str_cut, const cha
 }
 
 
-void cis_timing(int run, int module=2, int chan=2, const char * xval = 0)
+void cis_timing(int run, int module=10, int chan=2, const char * xval = 0)
 {
   const char* var_lo = "tFit_lo%s";
   const char* cut_lo = "cispar[7]==100 && 374 < cispar[6] && cispar[6] < 875";
@@ -146,7 +147,7 @@ void cis_timing(int run, int module=2, int chan=2, const char * xval = 0)
   cis_plot_frame(run, var_hi, cut_hi, name_hi, module, chan, xval);
 }
 
-void cis_ampq(int run, int module=2, int chan=2, const char * xval = 0)
+void cis_ampq(int run, int module=10, int chan=2, const char * xval = 0)
 {
   const char* var_lo = "eFit_lo%s/cispar[6]:cispar[6]";
   const char* cut_lo = "cispar[7]==100 && 374 < cispar[6] && cispar[6] < 875 && eFit_lo%s > 6";
@@ -155,7 +156,7 @@ void cis_ampq(int run, int module=2, int chan=2, const char * xval = 0)
   cis_plot_frame(run, var_lo, cut_lo, name_lo, module, chan, xval, "BOX", 2);
   const char* var_hi = "eFit_hi%s/cispar[6]:cispar[6]";
   const char* cut_hi = "cispar[7]==100 && 3 < cispar[6] && cispar[6] < 13 && eFit_hi%s > 40";
-  // if highgain amplitude is under 40, it's ignored in CIS calculations. 
+  // if highgain amplitude is under 40, it's ignored in CIS calculations.
   const char* name_hi = "%s_HG_AmpQ";
   cis_plot_frame(run, var_hi, cut_hi, name_hi, module, chan, xval, "BOX", 2);
 }
@@ -177,33 +178,30 @@ void check_run(int run){
 
 void check_all_runs(){
   //int runs[]{413287, 413579, 413594, 413976, 414257, 414464, 414513, 414763, 415169, 415434, 415531, 415564, 415914, 416099};
-  int runs[]{419864, 420384, 420709, 421222, 421606, 422100, 422198, 422233, 422268, 422529, 422767, 423123, 423287};
-  int num_runs{ static_cast<int>(std::size(runs)) };
-  for (int i{0}; i<num_runs; ++i){
+  //std::vector<int> runs = {423827, 424146, 424508, 424613, 424692, 424735, 425003, 425008, 425064, 425175, 425480, 425569, 425758, 426076, 426084, 426286, 426330, 426571, 426701};
+  std::vector<int> runs = {423827, 424146, 424508, 424613, 424692, 424735, 425003, 425008, 425064, 425175, 425480, 425569, 425758, 426076, 426084, 426286, 426330, 426571, 426701, 426816};
+  for (unsigned int i=0; i<runs.size(); ++i){
     check_run(runs[i]);
   }
 }
 
 void check_all_timing(){
-  int runs[]{413287, 413579, 413594, 413976, 414257, 414464, 414513, 414763, 415169, 415434, 415531, 415564, 415914, 416099};
-  int num_runs{ static_cast<int>(std::size(runs)) };
-  for (int i{0}; i<num_runs; ++i){
+  std::vector<int> runs = {423827, 424146, 424508, 424613, 424692, 424735, 425003, 425008, 425064, 425175, 425480, 425569, 425758, 426076, 426084, 426286, 426330, 426571, 426701};
+  for (unsigned int i=0; i<runs.size(); ++i){
     cis_timing(runs[i]);
   }
 }
 
 void check_all_ampq(){
-  int runs[]{413287, 413579, 413594, 413976, 414257, 414464, 414513, 414763, 415169, 415434, 415531, 415564, 415914, 416099};
-  int num_runs{ static_cast<int>(std::size(runs)) };
-  for (int i{0}; i<num_runs; ++i){
+  std::vector<int> runs = {423827, 424146, 424508, 424613, 424692, 424735, 425003, 425008, 425064, 425175, 425480, 425569, 425758, 426076, 426084, 426286, 426330, 426571, 426701};
+  for (unsigned int i=0; i<runs.size(); ++i){
     cis_ampq(runs[i]);
   }
 }
 
 void check_all_pulses(){
-  int runs[]{416626, 416941, 417164, 417535, 417882, 418169, 418412, 418778, 418994, 419504};
-  int num_runs{ static_cast<int>(std::size(runs)) };
-  for (int i{0}; i<num_runs; ++i){
+  std::vector<int> runs = {423827, 424146, 424508, 424613, 424692, 424735, 425003, 425008, 425064, 425175, 425480, 425569, 425758, 426076, 426084, 426286, 426330, 426571, 426701};
+  for (unsigned int i=0; i<runs.size(); ++i){
     cis_pulses(runs[i], 52);
   }
 }

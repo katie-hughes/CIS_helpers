@@ -2,7 +2,7 @@ import numpy as np
 import argparse
 
 parser = argparse.ArgumentParser(description='Return High Deviation Channels')
-parser.add_argument('--file', '-f', default=None, help=
+parser.add_argument('--file', '-f', default='CIS_DB_update.txt', help=
 'CIS Update .txt file ')
 
 args = parser.parse_args()

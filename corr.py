@@ -7,7 +7,7 @@ parser = argparse.ArgumentParser('Generate files to be used in updating sqlite v
 
 parser.add_argument('--directory', '-d', help='Directory where files are')
 
-parser.add_argument('--recalibrated_name', default='toRecalibrate.txt', help=
+parser.add_argument('--file', '-f', default='toRecalibrate.txt', help=
 'File containing channels to be recalibrated. \n \
 Default = toRecalibrate.txt. \n \
 Needs to follow this format: \n \

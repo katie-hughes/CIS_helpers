@@ -259,7 +259,7 @@ for key in D:
 		f.write('cd ~/Tucs/results\n')
 		f.write('ReadCalibFromCool.py --schema="sqlite://;schema=tileSqlite.db;dbname=CONDBR2" --folder=/TILE/OFL02/CALIB/CIS/LIN --tag=UPD1 | grep -v miss > Recal.txt\n')
 		for i in IDs:
-			f.write('grep \''+convertName(i)+'\' Recal.txt >> WOOOFinalRecal.txt\n')
+			f.write('grep \''+convertName(i)+'\' Recal.txt >> toRecalibrate.txt\n')
 		f.write('rm tileSqlite.db CIS_DB_update.txt Recal.txt\n')
 		f.write('cd ~/Tucs\n')
 

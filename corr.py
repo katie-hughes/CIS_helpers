@@ -43,6 +43,13 @@ with open(args.cis, 'r') as f:
 
 print()
 
+
+def fix_length(str):
+	if len(str) == 1:
+		return '0'+str
+	else:
+		return str
+
 corr1 = open(args.update, 'w')
 corr2 = open(args.not_update, 'w')
 in_update = 0
@@ -52,16 +59,21 @@ with open(args.recalibrated_name, 'r') as f:
 	# check if line matches the ID from the update list
 	for l in lines:
 		x = l.split()
-		ch_ID = x[0][:3]+'_m'+x[0][3:]+'_c'+x[1]
+		partition = fix_length(x[0][:3])
+		module = fix_length(x[0][3:])
+		channel = fix_length(x[1])
+		ch_ID = partition+'_m'+module+'_c'+channel
 		if x[2] == '1':
 			ch_ID += "_highgain"
 		else:
 			ch_ID += "_lowgain"
 		print('Recalibrated Channel: %s' % ch_ID)
 		if ch_ID in updated_channels:
+			print('In Update')
 			in_update += 1
 			corr1.write(l)
 		else:
+			print('Not in Update')
 			not_in_update += 1
 			corr2.write(l)
 

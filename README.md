@@ -13,10 +13,7 @@ Run these by:
 ```
 
 ### cis_charge.C
-Script to create/mass produce plots in root from CIS scan files. 
-* labels: defines plot labels
-* cis_charge_new: function to actually create and save the plots
-* cis_plot_frame: defines plotting parameters 
+Script to create/mass produce plots in root from CIS scan files. Relevant functions to run within root: 
 * cis_timing(int run, int module=2, int chan=2, const char * xval = 0): produces timing plots for a particular run for the default module 2, channel 2 for all 4 partitions. 
 * cis_ampq(int run, int module=2, int chan=2, const char * xval = 0): produces amp/q plots for a particular run for the default module 2, channel 2 for all 4 partitions. 
 * cis_pulses(int run, int module=2, int chan=10, const char * xval = 0): plots a random parameter (sample_lo) vs EvtNr for a particular run for all 4 partitions. If there are pulses missing you will see points at 0 at an unusual place. 

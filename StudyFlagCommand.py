@@ -6,7 +6,7 @@ from datetime import date
 #Katie Hughes, 2022
 
 
-parser = argparse.ArgumentParser(description='Generate StudyFlag Commands')
+parser = argparse.ArgumentParser(description='Generate commands for CIS constant recalibration')
 
 parser.add_argument('--recal_file', default=None, help=
 'Txt file of channels to be recalibrated. Required! \n \
@@ -27,7 +27,11 @@ parser.add_argument('--cistxt', help='cis.txt file (output of update command), \
 	if separate_partitions is used.', default=None)
 
 parser.add_argument('--cisupdate', action='store_true', help=
-'Generate CIS update command instead')
+'Generate new constants using the CIS update command instead of StudyFlag.')
+
+parser.add_argument('--result', help='if --cisupdate is used, \
+	name of the txt file containing the new constants. \
+	Default=toRecalibrate.txt (which will be in the results file)', default='toRecalibrate.txt')
 
 parser.add_argument('--separate_partitions', action='store_true', help=
 'Use if there are different valid runs for different partitions+gains.')
@@ -37,11 +41,6 @@ parser.add_argument('--valid_file', help=
 Only needed if separate_partitions is True. \
 Format: LBA_lowgain  396441 397150 397165 397192 397291 ....')
 
-parser.add_argument('--run_file', help=
-'File containing list of run numbers and dates that you get from \n \
-running the cis update script or studyflag. \n \
-Only valid if separate_partitions is True. \n \
-Format: run  [397291, \'CIS\', \'2021-07-13 15:24:33,2021-07-13 15:26:57\']\n')
 
 parser.add_argument('--bashfile', help='Bash File to be created', default='RecalCommands.sh')
 
@@ -169,7 +168,7 @@ with open(args.recal_file) as f:
 		date = year+'-'+month+'-'+day
 		datenum = int(year+month+day)
 		ID = partition+'_m'+module+'_c'+channel+gain
-		print("Channel ID: %s \t Date: %s"%(ID, date))
+		print("Channel ID: %s \t Recal Date: %s"%(ID, date))
 		if args.cistxt is not None:
 			listdate = True
 			mask = np.array(datenums)>datenum
@@ -259,7 +258,7 @@ for key in D:
 		f.write('cd ~/Tucs/results\n')
 		f.write('ReadCalibFromCool.py --schema="sqlite://;schema=tileSqlite.db;dbname=CONDBR2" --folder=/TILE/OFL02/CALIB/CIS/LIN --tag=UPD1 | grep -v miss > Recal.txt\n')
 		for i in IDs:
-			f.write('grep \''+convertName(i)+'\' Recal.txt >> toRecalibrate.txt\n')
+			f.write('grep \''+convertName(i)+'\' Recal.txt >> '+args.result+'\n')
 		f.write('rm tileSqlite.db CIS_DB_update.txt Recal.txt\n')
 		f.write('cd ~/Tucs\n')
 

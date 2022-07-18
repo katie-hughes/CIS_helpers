@@ -1,11 +1,8 @@
 import argparse
-import os
 
 #Katie Hughes, October 2021
 
 parser = argparse.ArgumentParser('Generate files to be used in updating sqlite values, based on whether they are in the update.')
-
-parser.add_argument('--directory', '-d', help='Directory where files are')
 
 parser.add_argument('--file', '-f', default='toRecalibrate.txt', help=
 'File containing channels to be recalibrated. \n \
@@ -23,14 +20,7 @@ parser.add_argument('--cis', default='CIS_DB_update.txt', help=
 
 args = parser.parse_args()
 
-if args.directory is not None:
-	try:
-		os.chdir(args.directory)
-	except:
-		print("Couldn't change to directory %s"%(args.directory))
 
-
-print("CHANNELS IN THE UPDATE:")
 # creating a list of the updated channels
 updated_channels = []
 with open(args.cis, 'r') as f:
@@ -38,7 +28,6 @@ with open(args.cis, 'r') as f:
 		if ("TILECAL" in l):
 			x = l.split()
 			ID = (x[0])[8:]
-			print(ID)
 			updated_channels.append(ID)
 
 print()
@@ -54,7 +43,7 @@ corr1 = open(args.update, 'w')
 corr2 = open(args.not_update, 'w')
 in_update = 0
 not_in_update = 0
-with open(args.recalibrated_name, 'r') as f:
+with open(args.file, 'r') as f:
 	lines = f.readlines()
 	# check if line matches the ID from the update list
 	for l in lines:
@@ -67,13 +56,13 @@ with open(args.recalibrated_name, 'r') as f:
 			ch_ID += "_highgain"
 		else:
 			ch_ID += "_lowgain"
-		print('Recalibrated Channel: %s' % ch_ID)
+		print('%s:' % ch_ID, end=' ')
 		if ch_ID in updated_channels:
-			print('In Update')
+			print('in the update')
 			in_update += 1
 			corr1.write(l)
 		else:
-			print('Not in Update')
+			print('NOT in the update')
 			not_in_update += 1
 			corr2.write(l)
 

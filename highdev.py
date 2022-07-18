@@ -7,13 +7,9 @@ parser.add_argument('--file', '-f', default='CIS_DB_update.txt', help=
 
 args = parser.parse_args()
 
-if args.file is None:
-	print('Need to specify your input file!')
-	exit()
-
-
-
 count = 0
+
+threshold = 0.05
 
 with open(args.file) as f:
 	for l in f.readlines():
@@ -23,8 +19,8 @@ with open(args.file) as f:
 			old = float(spl[1])
 			new = float(spl[2])
 			percent = float(spl[3])
-			if np.abs(percent) > 0.05:
+			if np.abs(percent) > threshold:
 				print('%s \t %.2f \t %.2f \t %.2f%% '%((module.strip('TILECAL')).strip('_'), old, new, percent*100))
 				count += 1
 
-print(count)
+print(f'{count} channels greater than {threshold*100}% change')

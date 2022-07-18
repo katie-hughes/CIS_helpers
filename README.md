@@ -2,6 +2,8 @@
 
 A collection of scripts to assist with running the CIS update! 
 
+My guide: https://docs.google.com/document/d/1j4nPQhlyucGZnkZhU7JdNx6T5cwepf6vH0LONC1STCg/edit?usp=sharing
+
 ## C++ files to be run in Root
 Run these by:
 ```
@@ -71,7 +73,7 @@ LBA02 06 0 7/22
 * --end_date: final date for recalibration. Default is today's date. Irrelevant if you specify cistxt, which will work with run numbers instead of dates. 
 * --output: output folder for plots, if StudyFlag macro is used. Default=ExampleFolder (~/Tucs/plots/latest/cis/ExampleFolder)
 * --cistxt: cis.txt file (output of running the CIS_DB_Update macro), the same as in ReturnRuns. This will extract the list of runs with the dates and make the plots slightly more accurate. If separate_partitions is used, it is required. 
-* --cisupdate: generate the recalibrate commands using the CIS_DB_Update macro instead of the StudyFlag macro (preferred as constants will be more accurate, and constants will be saved to a txt file instead of reading them off the plot!). 
+* --cisupdate: generate the recalibrate commands using the CIS_DB_Update macro instead of the StudyFlag macro (preferred as constants will be more accurate, and constants will be saved to a txt file instead of reading them off the plot!). The one caveat to this is that if channels are determined to be "not in the update" with this new date range, then they will not be present in the sqlite and thus won't be added in the final txt file of new values. Not sure how to get around this but it seems like a not super common case. If the channels that fit this scenario were not in the udpate originally, it doesn't matter as the "recalibrated" value is essentailly the same as the DB value (they don't need to be recalibrated!). But if the channel IS in the original update but is NOT in the recalibrated update, the best you can do at the moment is to just read the value off the recalibrated plot (which was the default before this option was added). 
 * --result: if --cisupdate is used, use this if you want to specify the name of the txt file containing new constants. The default is toRecalibrate.txt which will be located in the results file. 
 * --separate_partitions: use if there are different valid runs for different partitions
 * --valid_file: List of valid runs for each partition+gain. Only needed if separate_partitions is used. 
@@ -148,8 +150,26 @@ EBC52 41 1    81.951797
 5. We remove all of the files created by the CIS Update macro as we don't want things to get overwritten in weird ways. As we have saved the new constants, there is no other use for them. The plots that were created by the macro are still there in the plots/latest/cis/CIS_Update folder. 
 6. We return to the Tucs directory and repeat for all of the other commands over different run ranges. 
 ### corr.py 
+This will generate two files to be used in updating the sqlite values, one of channels in the update and one of channels NOT in the update. You can tell which channels are in the update by looking at CIS_DB_Update.txt.
+
+* --file, -f: File containing the channels to be recalibrated. Default is toRecalibrate.txt. It needs to follow this format: 
+```
+[PartitionModule Channel Gain Value]
+LBA02    06    1    75.97
+```
+* --update: Ouptut file of channels in the update, default=corr1.txt
+* --not_update: Output file of channels NOT in the update, default=corr2.txt
+* --cis: default=CIS_DB_Update.txt file. This contains all of the channels that are in the update and is used to separate the channels to recalibrate. 
+
+After this runs, verify that corr1.txt and corr2.txt look ok and follow the right format of PartitionModule Channel Gain Value. 
 
 ### update_flags.py 
+This will be used as an execfile in creating a new sqlite that describes any flag changes. As it cannot take any arguments, you must prefill two txt files that the script will read. Create and fill 2 files, RemoveBadCIS.txt and AddBadCIS.txt and fill appropriately. Example:
+```
+EBA_m19_c41_highgain
+EBC_m20_c10_lowgain
+```
 
 ### test_update_flags.py 
+As update_flags.py cannot be directly run, you can instead run test_update_flags.py once you have your two txt files filled in to make sure there are no typos or errors or anything. For example, if you misspell highgain or lowgain, you will see the gain printed as -1 instead of 0 or 1. 
 

@@ -8,7 +8,7 @@ from datetime import date
 
 parser = argparse.ArgumentParser(description='Generate commands for CIS constant recalibration')
 
-parser.add_argument('--recal_file', default=None, help=
+parser.add_argument('--recal_file', default='toRecalibrate.txt', help=
 'Txt file of channels to be recalibrated. Required! \n \
 Format: PartitionModule    channel gain    value(optional)    date \n \
 EX: LBA02	06	0	1.24	7/22 \n \

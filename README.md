@@ -73,12 +73,12 @@ LBA02 06 0 7/22
 * --cisupdate: generate the recalibrate commands using the CIS_DB_Update macro instead of the StudyFlag macro (preferred as constants will be more accurate, and constants will be saved to a txt file instead of reading them off the plot!). The one caveat to this is that if channels are determined to be "not in the update" with this new date range, then they will not be present in the sqlite and thus won't be added in the final txt file of new values. Not sure how to get around this but it seems like a not super common case. If the channels that fit this scenario were not in the udpate originally, it doesn't matter as the "recalibrated" value is essentailly the same as the DB value (they don't need to be recalibrated!). But if the channel IS in the original update but is NOT in the recalibrated update, the best you can do at the moment is to just read the value off the recalibrated plot (which was the default before this option was added). 
 * --result: if --cisupdate is used, use this if you want to specify the name of the txt file containing new constants. The default is toRecalibrate.txt which will be located in the results file. 
 * --separate_partitions: use if there are different valid runs for different partitions
-* --valid_file: List of valid runs for each partition+gain. Only needed if separate_partitions is used. 
-* --bashfile: Specify the name of the bash file to be created. Default: RecalCommands.sh
-Format: 
+* --valid_file: List of valid runs for each partition+gain. Only needed if separate_partitions is used. Format: 
 ```
 LBA_lowgain  396441 397150 397165 397192 397291 ....
 ```
+* --bashfile: Specify the name of the bash file to be created. Default: RecalCommands.sh
+
 
 Example of Running: 
 ```

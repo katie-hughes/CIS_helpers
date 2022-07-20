@@ -28,6 +28,8 @@ Script to examine individual CIS constant fits (ADC Count vs pC injected)
 * **plot(int run, int partition, int module, int channel, int gain)**: Plot one CIS constant fit for a particular run and particular channel. Partition Key: 1=LBA, 2=LBC, 3=EBA, 4=EBC. Module/channel self expalanatory. Gain: 0=lowgain, 1=highgain. (Example: to plot LBC_m23_c40_highgain, run plot(run, 2, 23, 40, 1)). 
 * **plot_all_runs(int partition, int module, int channel, int gain)**: Mass produce plots for a single channel according to the list of runs in the function body (again you must directly edit the file to update this list). The method for converting the channel IDs is the same as described in plot().
 
+Notes: I think this can also be done with the investigate.py macro :/ Would also be nice to print what the constant is on the plot, but I am not sure how to do that. 
+
 ### plot_cis.C
 Script written by Sasha which I adapted into my_plot_cis
 

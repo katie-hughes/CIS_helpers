@@ -9,7 +9,10 @@ Run these by:
 ```
 > root
 > .L [filename] 
-> function()
+> function1()
+> function2()
+.....
+> .exit
 ```
 
 ### cis_charge.C

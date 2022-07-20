@@ -67,7 +67,7 @@ LBC_m52_c18_highgain 	 94.86 	 105.24 	 10.95%
 Script to assist with "manual" channel recalibration (aims to make as little of it manual as possible!). I usually run only specifying --recal_file, --cistxt, and --cisupdate. 
 
 Arguments: 
-* --recal_file: Txt file of channels to be recalibrated. Required! Format: 
+* --recal_file: Txt file of channels to be recalibrated. The default is toRecalibrate.txt. Required! Format: 
 ```
 [PartitionModule channel gain]
 LBA02 06 0 7/22
